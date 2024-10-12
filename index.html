@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحويل النص بين العربية والإيزيدية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f0f8ff;
+        }
+        textarea, button, select {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 24px;
+            background-color: #e6f7ff;
+            padding: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>تحويل النص بين العربية والإيزيدية</h1>
+    <textarea id="inputText" placeholder="أدخل النص هنا"></textarea>
+    <br>
+    <select id="direction">
+        <option value="toYezidi">من العربية إلى الإيزيدية</option>
+        <option value="toArabic">من الإيزيدية إلى العربية</option>
+    </select>
+    <br>
+    <button onclick="convertText()">تحويل</button>
+    <div id="output"></div>
+
+    <script>
+        function convertText() {
+            const inputText = document.getElementById("inputText").value;
+            const direction = document.getElementById("direction").value;
+
+            fetch('/convert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: inputText, direction: direction }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("output").innerText = data.output;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
